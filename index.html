@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HungerHub — Home-cooked meals at half the price of Swiggy. Verified cooks, protein-rich food, grouped delivery. Join 800+ Bengaluru students.">
+<title>HungerHub — Ghar Ka Khana, Half the Price of Swiggy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --saffron:#D4562A;--saffron-d:#A83A18;--saffron-g:rgba(212,86,42,.1);
+  --turmeric:#E8A630;--turmeric-s:rgba(232,166,48,.08);
+  --cream:#FFF9F0;--warm:#FFFCF7;--clay:#F5E6D3;
+  --ink:#1C1410;--body:#3E342E;--muted:#8C7E74;
+  --leaf:#3A7D44;--leaf-s:rgba(58,125,68,.06);
+  --curd:#FFF;--border:rgba(0,0,0,.05);
+  --sh-s:0 2px 10px rgba(28,20,16,.04);--sh-m:0 14px 44px rgba(28,20,16,.07);--sh-l:0 28px 70px rgba(28,20,16,.1);
+  --r:20px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--body);background:var(--warm);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.logo-text{font-family:'Playfair Display',serif;font-weight:700}
+a{text-decoration:none;color:inherit}
+/* Grain */
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--saffron),var(--turmeric),var(--leaf));z-index:999;width:0;transition:width .05s}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}.rv.vis{opacity:1;transform:none}.rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}.rv-d3{transition-delay:.3s}.rv-d4{transition-delay:.4s}
+
+/* Food particles */
+.fp{position:fixed;pointer-events:none;z-index:0;opacity:0;animation:fpRise 9s ease-in-out infinite;font-size:1.2rem}
+@keyframes fpRise{0%{opacity:0;transform:translateY(100vh) rotate(0)}12%{opacity:.25}88%{opacity:.25}100%{opacity:0;transform:translateY(-80px) rotate(360deg)}}
+
+/* Confetti */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;display:none}
+.confetti-wrap.go{display:block}
+.confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:confettiFall 3s ease-out forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* ═══ TICKER ═══ */
+.ticker{background:var(--ink);color:#fff;padding:9px 0;overflow:hidden;white-space:nowrap;font-size:.74rem;font-weight:500;letter-spacing:.03em;position:relative;z-index:90}
+.ticker-inner{display:inline-flex;animation:mq 28s linear infinite}
+.ticker-inner span{margin-right:36px;display:inline-flex;align-items:center;gap:5px}
+.ticker-inner em{color:var(--turmeric);font-style:normal;font-weight:700}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:12px 32px;background:rgba(255,252,247,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
+nav.scrolled{box-shadow:var(--sh-s);padding:10px 32px}
+.logo{display:flex;align-items:center;gap:7px;cursor:pointer;transition:transform .3s}
+.logo:hover{transform:scale(1.03)}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--saffron),var(--turmeric));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:transform .4s}
+.logo:hover .logo-icon{transform:rotate(-8deg)}
+.logo-text{font-size:1.25rem;color:var(--saffron)}.logo-text span{color:var(--ink)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:.82rem;font-weight:600;color:var(--body);position:relative;transition:color .2s;padding:3px 0}
+.nav-links a:not(.btn-cta):hover{color:var(--saffron)}
+.nav-links a:not(.btn-cta)::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--saffron);border-radius:1px;transition:width .3s}
+.nav-links a:not(.btn-cta):hover::after{width:100%}
+.nav-links a.act{color:var(--saffron)}.nav-links a.act::after{width:100%}
+.btn-cta{background:var(--saffron);color:#fff;padding:9px 22px;border-radius:50px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:5px;box-shadow:0 4px 16px rgba(212,86,42,.2)}
+.btn-cta:hover{background:var(--saffron-d);transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,86,42,.3)}
+.btn-outline{padding:9px 22px;border-radius:50px;font-size:.82rem;font-weight:600;color:var(--body);border:1.5px solid rgba(28,20,16,.1);transition:all .3s}
+.btn-outline:hover{border-color:var(--saffron);color:var(--saffron)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;width:26px;height:18px;flex-direction:column;justify-content:space-between}
+.nav-toggle span{display:block;width:100%;height:2px;background:var(--ink);border-radius:2px;transition:.3s}
+
+/* ═══ HERO — "Zomato Killer" copy ═══ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 32px 60px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45}
+.blob-1{width:500px;height:500px;background:var(--saffron-g);top:-8%;right:-4%;animation:bf 12s ease-in-out infinite}
+.blob-2{width:300px;height:300px;background:var(--turmeric-s);bottom:-3%;left:-2%;animation:bf 14s ease-in-out infinite reverse}
+@keyframes bf{0%,100%{transform:translate(0) scale(1)}50%{transform:translate(25px,-18px) scale(1.04)}}
+
+.hero-inner{max-width:1140px;margin:0 auto;width:100%;display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center;position:relative;z-index:1}
+.hero-pill{display:inline-flex;align-items:center;gap:7px;background:var(--leaf-s);color:var(--leaf);padding:5px 14px;border-radius:50px;font-size:.74rem;font-weight:600;margin-bottom:16px}
+.live-dot{width:6px;height:6px;background:var(--leaf);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
+
+.hero h1{font-size:clamp(2.3rem,4.8vw,3.6rem);line-height:1.08;color:var(--ink);margin-bottom:14px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--saffron),var(--turmeric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 .line-through{text-decoration:line-through;color:var(--muted);-webkit-text-fill-color:var(--muted);font-size:.65em;opacity:.5}
+.hero-sub{font-size:1.02rem;line-height:1.7;color:var(--muted);max-width:440px;margin-bottom:24px}
+.hero-sub strong{color:var(--ink);font-weight:600}
+.hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+
+/* Social proof strip */
+.social-proof{display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--muted)}
+.avatar-stack{display:flex}
+.avatar-stack .av{width:28px;height:28px;border-radius:50%;border:2px solid var(--curd);margin-right:-8px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff}
+.av-1{background:var(--saffron)}.av-2{background:var(--turmeric)}.av-3{background:var(--leaf)}.av-4{background:#8B5CF6}.av-5{background:#EC4899}
+.social-proof strong{color:var(--ink)}
+
+/* Hero card with steam */
+.hero-visual{position:relative}
+.steam-wrap{position:absolute;top:-18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
+.steam{width:8px;opacity:.35;animation:sr 2.5s ease-out infinite}
+.steam:nth-child(2){animation-delay:.5s;animation-duration:3s}
+.steam:nth-child(3){animation-delay:1s}
+@keyframes sr{0%{transform:translateY(0) scaleX(1);opacity:.35}100%{transform:translateY(-35px) scaleX(1.8);opacity:0}}
+
+.hero-card{background:var(--curd);border-radius:var(--r);padding:24px;box-shadow:var(--sh-l);position:relative;overflow:hidden;transition:transform .4s}
+.hero-card:hover{transform:translateY(-3px)}
+.hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--saffron),var(--turmeric),var(--leaf))}
+/* Trust badges */
+.trust-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.trust-badge{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em}
+.trust-badge.fssai{background:#E8F5E9;color:var(--leaf)}.trust-badge.verified{background:#FFF3E0;color:var(--saffron)}.trust-badge.rated{background:#F3E5F5;color:#7B1FA2}
+
+.meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.meal-item{background:var(--cream);border-radius:14px;padding:14px 10px;text-align:center;transition:all .25s;cursor:pointer;position:relative}
+.meal-item:hover{transform:translateY(-2px) rotate(-.5deg);box-shadow:var(--sh-s)}
+.meal-emoji{font-size:1.8rem;margin-bottom:3px;display:block;transition:transform .3s}
+.meal-item:hover .meal-emoji{transform:scale(1.12) rotate(5deg)}
+.meal-name{font-weight:600;font-size:.76rem;color:var(--ink)}
+.meal-price{font-size:.72rem;color:var(--leaf);font-weight:700;margin-top:2px}
+.meal-tag{font-size:.6rem;color:var(--muted);margin-top:1px}
+.meal-badge{position:absolute;top:6px;right:6px;background:var(--saffron);color:#fff;font-size:.5rem;padding:2px 5px;border-radius:3px;font-weight:700}
+
+.hero-stats{display:flex;justify-content:space-around;padding-top:14px;border-top:1px solid var(--border)}
+.stat{text-align:center}.stat-num{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--saffron);font-weight:800}.stat-label{font-size:.64rem;color:var(--muted);font-weight:500;margin-top:1px}
+
+.float-tag{position:absolute;background:var(--curd);border-radius:12px;padding:8px 14px;box-shadow:var(--sh-m);font-size:.74rem;font-weight:600;display:flex;align-items:center;gap:5px;white-space:nowrap;z-index:2;animation:bob 4s ease-in-out infinite}
+.float-tag.tr{top:-14px;right:-6px}.float-tag.bl{bottom:-10px;left:-6px;animation-delay:2s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ═══ SECTIONS ═══ */
+.sec{padding:88px 32px;position:relative}
+.sec-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--saffron);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:18px;height:2px;background:var(--saffron);border-radius:1px}
+.sec-title{font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:12px;line-height:1.12;color:var(--ink)}
+.sec-desc{font-size:.95rem;color:var(--muted);max-width:480px;line-height:1.65;margin-bottom:48px}
+.container{max-width:1140px;margin:0 auto}
+
+/* ═══ PRICING COMPARISON TABLE (Game changer) ═══ */
+.compare-sec{background:var(--cream)}
+.compare-table{max-width:700px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-m)}
+.compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;align-items:center;padding:16px 20px;font-size:.84rem;border-bottom:1px solid var(--border);transition:background .2s}
+.compare-row:hover{background:rgba(212,86,42,.03)}
+.compare-row.head{background:var(--ink);color:#fff;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.compare-row.head:hover{background:var(--ink)}
+.compare-row.winner{background:linear-gradient(90deg,rgba(58,125,68,.06),rgba(58,125,68,.02));border-left:3px solid var(--leaf)}
+.compare-platform{font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.compare-val{text-align:center;font-weight:600}
+.compare-val.red{color:var(--saffron)}.compare-val.green{color:var(--leaf)}
+.compare-qual{text-align:center;font-size:.75rem}
+.winner-tag{font-size:.55rem;background:var(--leaf);color:#fff;padding:2px 6px;border-radius:3px;font-weight:700;text-transform:uppercase}
+.strikethrough{text-decoration:line-through;color:var(--muted);font-weight:400}
+
+/* ═══ DECISION TRIGGER ═══ */
+.trigger-sec{background:var(--ink);color:#fff;overflow:hidden;position:relative}
+.trigger-sec::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--saffron) 0,var(--saffron) 40px,var(--turmeric) 40px,var(--turmeric) 80px,var(--leaf) 80px,var(--leaf) 120px)}
+.trigger-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.trigger-card{text-align:center;padding:36px 24px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);transition:all .3s}
+.trigger-card:hover{background:rgba(255,255,255,.06);transform:translateY(-4px)}
+.trigger-num{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--turmeric),var(--saffron));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.trigger-label{font-size:.9rem;font-weight:600;margin:8px 0 4px}
+.trigger-sub{font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* ═══ MENU PREVIEW ═══ */
+.menu-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.filter-btn{padding:8px 18px;border-radius:50px;border:1.5px solid var(--border);background:var(--curd);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .3s;color:var(--body)}
+.filter-btn.active,.filter-btn:hover{background:var(--saffron);color:#fff;border-color:var(--saffron)}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.menu-card{background:var(--curd);border-radius:16px;padding:20px 16px;text-align:center;border:1.5px solid var(--border);transition:all .3s;cursor:pointer}
+.menu-card:hover{border-color:var(--saffron);transform:translateY(-3px);box-shadow:var(--sh-s)}
+.menu-card.hidden{display:none}
+.menu-card .meal-emoji{font-size:2.4rem;margin-bottom:8px}
+.menu-card .meal-name{font-size:.85rem}
+.menu-card .meal-price{font-size:.8rem;margin-top:4px}
+.menu-card .meal-tag{margin-top:4px}
+.menu-card .macro-bar{height:4px;border-radius:2px;background:var(--clay);margin-top:8px;overflow:hidden}
+.menu-card .macro-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--leaf),var(--turmeric));transition:width .6s}
+.menu-type{display:inline-block;font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:3px;margin-top:6px;text-transform:uppercase}
+.menu-type.veg{background:#E8F5E9;color:var(--leaf)}.menu-type.nv{background:#FFEBEE;color:#C62828}.menu-type.hp{background:#E3F2FD;color:#1565C0}
+
+/* ═══ HOW IT WORKS ═══ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative}
+.steps::before{content:'';position:absolute;top:55px;left:13%;right:13%;height:2px;background:repeating-linear-gradient(90deg,var(--saffron) 0,var(--saffron) 6px,transparent 6px,transparent 14px);opacity:.15}
+.step{padding:28px 20px;background:var(--curd);border-radius:var(--r);border:1px solid var(--border);transition:all .3s;text-align:center}
+.step:hover{transform:translateY(-5px);box-shadow:var(--sh-m);border-color:var(--saffron)}
+.step-n{width:42px;height:42px;background:linear-gradient(135deg,var(--saffron),var(--turmeric));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#fff;font-weight:800;font-size:1rem;font-family:'Playfair Display',serif;transition:transform .4s}
+.step:hover .step-n{transform:rotate(360deg)}
+.step h3{font-size:.95rem;margin-bottom:5px;color:var(--ink)}
+.step p{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* ═══ COOK CAROUSEL ═══ */
+.cook-sec{background:var(--clay);overflow:hidden}
+.cook-track{display:flex;gap:16px;animation:cs 22s linear infinite;width:max-content}
+.cook-track:hover{animation-play-state:paused}
+.cook-card{width:240px;flex-shrink:0;background:var(--curd);border-radius:var(--r);padding:20px;text-align:center;transition:transform .3s;position:relative}
+.cook-card:hover{transform:scale(1.03)}
+.cook-avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;position:relative}
+.cook-avatar .verified-check{position:absolute;bottom:0;right:0;background:var(--leaf);color:#fff;width:18px;height:18px;border-radius:50%;font-size:.55rem;display:flex;align-items:center;justify-content:center;border:2px solid var(--curd);font-weight:700}
+.cook-name{font-weight:700;font-size:.85rem;color:var(--ink)}
+.cook-spec{font-size:.72rem;color:var(--muted);margin:3px 0 6px}
+.cook-stars{color:var(--turmeric);font-size:.75rem;letter-spacing:1px}
+.cook-meals{font-size:.65rem;color:var(--muted);margin-top:3px}
+.cook-inspect{font-size:.58rem;color:var(--leaf);font-weight:700;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:3px;text-transform:uppercase;letter-spacing:.05em}
+@keyframes cs{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ═══ PRICING ═══ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
+.price-card{padding:32px 24px;border-radius:var(--r);background:var(--curd);text-align:center;border:1.5px solid var(--border);transition:all .3s;position:relative;overflow:hidden}
+.price-card.pop{border-color:var(--saffron);box-shadow:var(--sh-l)}
+.price-card.pop::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--saffron),var(--turmeric))}
+.price-card.pop .pop-tag{position:absolute;top:12px;right:-26px;background:var(--saffron);color:#fff;padding:3px 32px;font-size:.6rem;font-weight:700;text-transform:uppercase;transform:rotate(45deg)}
+.price-card:hover{transform:translateY(-4px);box-shadow:var(--sh-m)}
+.price-emoji{font-size:2rem;margin-bottom:10px;display:block}
+.price-plan{font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
+.price-amt{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--ink);font-weight:800}
+.price-amt span{font-size:.82rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400}
+.price-save{font-size:.7rem;color:var(--leaf);font-weight:700;margin-top:4px}
+.price-features{list-style:none;margin:18px 0;text-align:left}
+.price-features li{font-size:.78rem;color:var(--body);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.price-features li::before{content:'🍃';font-size:.65rem}
+
+/* ═══ REFERRAL ═══ */
+.ref-card{max-width:600px;margin:0 auto;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-radius:var(--r);padding:36px;color:#fff;text-align:center;position:relative;overflow:hidden}
+.ref-card::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z'/%3E%3C/g%3E%3C/svg%3E")}
+.ref-card h3{font-size:1.4rem;margin-bottom:8px;position:relative}
+.ref-card p{font-size:.9rem;opacity:.85;line-height:1.5;position:relative}
+.ref-perks{display:flex;gap:16px;justify-content:center;margin-top:20px;flex-wrap:wrap;position:relative}
+.ref-perk{background:rgba(255,255,255,.15);padding:10px 16px;border-radius:12px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px}
+
+/* ═══ ZONES ═══ */
+.zone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:700px}
+.zone-card{background:var(--curd);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;border:1.5px solid var(--border);transition:all .3s;cursor:pointer}
+.zone-card:hover{border-color:var(--saffron);box-shadow:var(--sh-s);transform:translateX(3px)}
+.zone-pin{width:36px;height:36px;background:var(--saffron-g);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.zone-name{font-weight:700;font-size:.82rem;color:var(--ink)}
+.zone-status{font-size:.65rem;font-weight:600}
+.zone-status.live{color:var(--leaf)}.zone-status.soon{color:var(--turmeric)}
+.zone-demand{font-size:.6rem;color:var(--muted);margin-top:1px}
+
+/* ═══ AI SECTION ═══ */
+.ai-card{max-width:600px;margin:0 auto;background:var(--curd);border-radius:var(--r);padding:36px;box-shadow:var(--sh-m);text-align:center;border:1.5px solid var(--border);position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8B5CF6,#3B82F6,var(--leaf))}
+.ai-icon{font-size:2.4rem;margin-bottom:12px;display:block}
+.ai-tag{font-size:.6rem;font-weight:700;color:#8B5CF6;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+
+/* ═══ TESTIMONIALS ═══ */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.testi{padding:24px;border-radius:var(--r);background:var(--cream);position:relative;transition:transform .3s}
+.testi:hover{transform:translateY(-3px)}
+.testi::before{content:'❝';font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--saffron-g);position:absolute;top:8px;left:16px;line-height:1}
+.testi p{font-size:.84rem;line-height:1.55;color:var(--body);margin-bottom:14px;padding-top:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:8px}
+.testi-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--turmeric));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0}
+.testi-name{font-weight:700;font-size:.78rem}.testi-role{font-size:.66rem;color:var(--muted)}
+
+/* ═══ WAITLIST ═══ */
+.wl-sec{background:linear-gradient(145deg,var(--saffron) 0%,var(--saffron-d) 60%,#6B2010 100%);color:#fff;text-align:center;padding:88px 32px;position:relative;overflow:hidden}
+.wl-sec::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z'/%3E%3C/g%3E%3C/svg%3E")}
+.wl-sec h2{font-size:clamp(1.8rem,3.5vw,2.5rem);margin-bottom:8px;position:relative}
+.wl-sec>p{font-size:.95rem;opacity:.75;margin-bottom:12px;max-width:440px;margin-left:auto;margin-right:auto;position:relative;line-height:1.5}
+.urgency-strip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);padding:6px 16px;border-radius:50px;font-size:.76rem;font-weight:600;margin-bottom:28px;position:relative;animation:urgPulse 2s infinite}
+@keyframes urgPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.1)}50%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
+.wl-form{max-width:480px;margin:0 auto;position:relative}
+.wl-form .row{display:flex;gap:8px;margin-bottom:8px}
+.wl-form input,.wl-form select{flex:1;padding:12px 16px;border:1.5px solid rgba(255,255,255,.15);border-radius:11px;background:rgba(255,255,255,.08);color:#fff;font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;transition:all .3s;-webkit-appearance:none}
+.wl-form input::placeholder{color:rgba(255,255,255,.38)}
+.wl-form input:focus,.wl-form select:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.12)}
+.wl-form select{cursor:pointer}.wl-form select option{color:var(--ink);background:#fff}
+.btn-wl{width:100%;padding:14px;background:#fff;color:var(--saffron);border:none;border-radius:11px;font-size:.92rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .3s;margin-top:3px;box-shadow:0 8px 24px rgba(0,0,0,.15);position:relative;overflow:hidden}
+.btn-wl::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:translateX(-100%);transition:transform .6s}
+.btn-wl:hover::after{transform:translateX(100%)}
+.btn-wl:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.wl-note{font-size:.68rem;opacity:.35;margin-top:10px;position:relative}
+.wl-perks{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap;position:relative}
+.wl-perk{font-size:.7rem;font-weight:600;display:flex;align-items:center;gap:4px;opacity:.7}
+.wl-ok{display:none;position:relative;animation:fu .5s ease both}
+.wl-ok.show{display:block}
+.wl-form.gone{display:none}
+.ok-emoji{font-size:2.8rem;margin-bottom:10px;display:block}
+.ok-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px}
+.ok-msg{font-size:.88rem;opacity:.8;line-height:1.5}
+.wl-count{display:inline-block;background:rgba(255,255,255,.12);padding:7px 16px;border-radius:50px;font-size:.78rem;font-weight:600;margin-top:14px;position:relative}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══ STICKY MOBILE CTA ═══ */
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:150;background:var(--curd);padding:10px 16px;box-shadow:0 -4px 20px rgba(0,0,0,.08);display:none;align-items:center;justify-content:space-between;gap:10px;border-top:2px solid var(--saffron)}
+.sticky-cta .sticky-text{font-size:.8rem;font-weight:600;color:var(--ink)}
+.sticky-cta .sticky-text span{color:var(--saffron);font-family:'Playfair Display',serif;font-size:1rem}
+.sticky-cta .btn-cta{padding:10px 20px;font-size:.8rem;white-space:nowrap}
+
+/* WhatsApp */
+.wa{position:fixed;bottom:24px;right:24px;z-index:150;background:#25D366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 18px rgba(37,211,102,.3);transition:all .3s;cursor:pointer;border:none}
+.wa:hover{transform:scale(1.1)}
+.wa .wa-p{position:absolute;inset:-3px;border-radius:50%;border:2px solid #25D366;animation:wap 2s infinite}
+@keyframes wap{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.4);opacity:0}}
+
+/* ═══ FOOTER ═══ */
+footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 32px 28px}
+.footer-inner{max-width:1140px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px}
+.footer-brand .logo-text{color:#fff;font-size:1.1rem}.footer-brand .logo-text span{color:rgba(255,255,255,.5)}
+.footer-brand p{font-size:.78rem;max-width:240px;line-height:1.6;margin-top:8px}
+.footer-col h4{color:#fff;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.footer-col a{display:block;color:rgba(255,255,255,.4);font-size:.78rem;margin-bottom:7px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1140px;margin:28px auto 0;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);font-size:.68rem;text-align:center}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  nav{padding:10px 16px}
+  .nav-toggle{display:flex}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(255,252,247,.97);backdrop-filter:blur(20px);flex-direction:column;gap:0;padding:6px 0;border-bottom:1px solid var(--border);box-shadow:var(--sh-m)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px 20px;width:100%}
+  .nav-links .btn-cta{margin:6px 20px 12px;width:calc(100% - 40px);justify-content:center}
+  .hero{padding:90px 16px 40px;min-height:auto}
+  .hero-inner{grid-template-columns:1fr;gap:28px}
+  .hero-visual{order:-1;max-width:360px;margin:0 auto}
+  .float-tag{display:none}
+  .sec{padding:48px 16px}
+  .steps{grid-template-columns:1fr 1fr}.steps::before{display:none}
+  .trigger-grid,.why-grid,.testi-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}
+  .zone-grid{grid-template-columns:1fr}
+  .menu-grid{grid-template-columns:1fr 1fr}
+  .compare-row{grid-template-columns:1fr 1fr 1fr 1fr;font-size:.72rem;padding:12px 14px}
+  .wl-sec{padding:48px 16px}
+  .wl-form .row{flex-direction:column}
+  .ref-perks{flex-direction:column;align-items:center}
+  .sticky-cta{display:flex}
+  .wa{bottom:70px}
+}
+@media(max-width:600px){
+  .hero h1{font-size:1.9rem}
+  .hero-sub{font-size:.88rem}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn-cta,.hero-actions .btn-outline{text-align:center;justify-content:center}
+  .steps{grid-template-columns:1fr}
+  .sec-title{font-size:1.6rem}
+  .menu-grid{grid-template-columns:1fr 1fr}
+  .compare-row{font-size:.65rem;padding:10px 10px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="particles"></div>
+<div class="confetti-wrap" id="confetti"></div>
+
+<!-- Ticker -->
+<div class="ticker"><div class="ticker-inner">
+<span>🍱 <em>800+</em> meals this week</span><span>👩‍🍳 <em>50+</em> verified cooks</span><span>📍 Live in <em>Bengaluru</em></span><span>💰 <em>50%</em> cheaper than Swiggy</span><span>⭐ <em>4.8</em> avg rating</span><span>🥗 <em>32g</em> protein/thali</span><span>🚚 Delivery from <em>₹8</em></span><span>🔥 Only <em>147 spots</em> left for free delivery</span>
+<span>🍱 <em>800+</em> meals this week</span><span>👩‍🍳 <em>50+</em> verified cooks</span><span>📍 Live in <em>Bengaluru</em></span><span>💰 <em>50%</em> cheaper than Swiggy</span><span>⭐ <em>4.8</em> avg rating</span><span>🥗 <em>32g</em> protein/thali</span><span>🚚 Delivery from <em>₹8</em></span><span>🔥 Only <em>147 spots</em> left for free delivery</span>
+</div></div>
+
+<!-- Nav -->
+<nav id="nav">
+  <a class="logo" href="#home" onclick="goTo('home')"><div class="logo-icon">🍛</div><div class="logo-text">Hunger<span>Hub</span></div></a>
+  <button class="nav-toggle" id="navT" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="nav-links" id="navL">
+    <a href="#menu" onclick="goTo('menu')">Menu</a>
+    <a href="#how" onclick="goTo('how')">How</a>
+    <a href="#pricing" onclick="goTo('pricing')">Plans</a>
+    <a href="#zones" onclick="goTo('zones')">Zones</a>
+    <a href="#waitlist" onclick="goTo('waitlist')" class="btn-cta">Join Waitlist ✦</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-pill rv"><span class="live-dot"></span> 847 students already waiting</div>
+      <h1 class="rv rv-d1"><span class="line-through">₹250 Swiggy meals</span><br>Ghar ka khana.<br><em>₹80. Delivered.</em></h1>
+      <p class="hero-sub rv rv-d2">Verified home cooks. <strong>Protein-rich meals.</strong> Grouped delivery to your campus. Half the price of food apps, twice the taste of hostel mess.</p>
+      <div class="hero-actions rv rv-d3">
+        <a href="#waitlist" class="btn-cta" onclick="goTo('waitlist')">Get Free First Meal →</a>
+        <a href="#compare" class="btn-outline" onclick="goTo('compare')">See Price Comparison</a>
+      </div>
+      <div class="social-proof rv rv-d4">
+        <div class="avatar-stack"><div class="av av-1">R</div><div class="av av-2">P</div><div class="av av-3">A</div><div class="av av-4">S</div><div class="av av-5">+</div></div>
+        <span>Joined by <strong>847 students</strong> across 3 campuses</span>
+      </div>
+    </div>
+    <div class="hero-visual rv rv-d2">
+      <div class="float-tag tr">⭐ 4.8 rated</div>
+      <div class="float-tag bl">🚀 30 min</div>
+      <div class="hero-card">
+        <div class="steam-wrap"><svg class="steam" viewBox="0 0 20 40"><path d="M10 40Q5 30 10 20Q15 10 10 0" stroke="rgba(212,86,42,.2)" fill="none" stroke-width="2"/></svg><svg class="steam" viewBox="0 0 20 40"><path d="M10 40Q15 30 10 20Q5 10 10 0" stroke="rgba(212,86,42,.15)" fill="none" stroke-width="2"/></svg><svg class="steam" viewBox="0 0 20 40"><path d="M10 40Q5 28 10 18Q15 8 10 0" stroke="rgba(212,86,42,.12)" fill="none" stroke-width="2"/></svg></div>
+        <div class="trust-row">
+          <span class="trust-badge fssai">🛡 FSSAI Verified</span>
+          <span class="trust-badge verified">✓ Kitchen Inspected</span>
+          <span class="trust-badge rated">⭐ 4.8 Avg Rating</span>
+        </div>
+        <div class="meal-grid">
+          <div class="meal-item"><div class="meal-badge">🔥 HOT</div><span class="meal-emoji">🍱</span><div class="meal-name">Protein Thali</div><div class="meal-price">₹99</div><div class="meal-tag">32g protein</div></div>
+          <div class="meal-item"><span class="meal-emoji">🥘</span><div class="meal-name">Paneer Power</div><div class="meal-price">₹89</div><div class="meal-tag">28g protein</div></div>
+          <div class="meal-item"><span class="meal-emoji">🍲</span><div class="meal-name">Dal Rice</div><div class="meal-price">₹69</div><div class="meal-tag">18g protein</div></div>
+          <div class="meal-item"><div class="meal-badge">NEW</div><span class="meal-emoji">🥗</span><div class="meal-name">Sprouts Bowl</div><div class="meal-price">₹59</div><div class="meal-tag">22g protein</div></div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num" data-target="500">0</div><div class="stat-label">Students Fed</div></div>
+          <div class="stat"><div class="stat-num" data-target="50">0</div><div class="stat-label">Home Cooks</div></div>
+          <div class="stat"><div class="stat-num">₹80</div><div class="stat-label">Avg Cost</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICE COMPARISON TABLE ═══ -->
+<section class="sec compare-sec" id="compare">
+  <div class="container">
+    <div class="sec-label rv">The Real Comparison</div>
+    <h2 class="sec-title rv rv-d1">See why students are switching.</h2>
+    <p class="sec-desc rv rv-d2">Same hunger. Very different bills.</p>
+    <div class="compare-table rv rv-d3">
+      <div class="compare-row head"><div>Platform</div><div style="text-align:center">Cost/Meal</div><div style="text-align:center">Monthly (30)</div><div style="text-align:center">Quality</div></div>
+      <div class="compare-row"><div class="compare-platform">🟠 Swiggy/Zomato</div><div class="compare-val red">₹250</div><div class="compare-val red">₹7,500</div><div class="compare-qual">Restaurant food</div></div>
+      <div class="compare-row"><div class="compare-platform">🏠 Hostel Mess</div><div class="compare-val">₹70</div><div class="compare-val">₹2,100</div><div class="compare-qual">Low quality 😕</div></div>
+      <div class="compare-row"><div class="compare-platform">📞 Random Tiffin</div><div class="compare-val">₹100</div><div class="compare-val">₹3,000</div><div class="compare-qual">Unverified ⚠️</div></div>
+      <div class="compare-row winner"><div class="compare-platform">🍛 <strong>HungerHub</strong> <span class="winner-tag">Best</span></div><div class="compare-val green">₹90</div><div class="compare-val green">₹2,700</div><div class="compare-qual">Verified home food ✅</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DECISION TRIGGERS ═══ -->
+<section class="sec trigger-sec" id="triggers">
+  <div class="container">
+    <div class="sec-label rv">Why Students Switch in 7 Days</div>
+    <h2 class="sec-title rv rv-d1" style="color:#fff">The math is simple.</h2>
+    <p class="sec-desc rv rv-d2" style="color:rgba(255,255,255,.45)">Every month you don't switch, you're leaving money and health on the table.</p>
+    <div class="trigger-grid">
+      <div class="trigger-card rv"><div class="trigger-num">₹4,800</div><div class="trigger-label">Saved per month</div><div class="trigger-sub">vs ordering from Swiggy/Zomato daily. That's ₹57,600/year back in your pocket.</div></div>
+      <div class="trigger-card rv rv-d1"><div class="trigger-num">32g</div><div class="trigger-label">Protein per meal</div><div class="trigger-sub">No more Maggi dinners. Real nutrition. More energy for classes, gym, and life.</div></div>
+      <div class="trigger-card rv rv-d2"><div class="trigger-num">0</div><div class="trigger-label">Minutes wasted</div><div class="trigger-sub">No calling. No WhatsApp hunting. No guessing. Subscribe once, eat daily.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MENU PREVIEW ═══ -->
+<section class="sec" id="menu" style="background:var(--cream)">
+  <div class="container">
+    <div class="sec-label rv">Today's Menu Preview</div>
+    <h2 class="sec-title rv rv-d1">What's cooking today?</h2>
+    <p class="sec-desc rv rv-d2">Filter by your preference. Every meal shows protein content.</p>
+    <div class="menu-filters rv rv-d3">
+      <button class="filter-btn active" onclick="filterMenu('all')">All</button>
+      <button class="filter-btn" onclick="filterMenu('veg')">🟢 Veg</button>
+      <button class="filter-btn" onclick="filterMenu('nv')">🔴 Non-Veg</button>
+      <button class="filter-btn" onclick="filterMenu('hp')">💪 High Protein</button>
+    </div>
+    <div class="menu-grid" id="menuGrid">
+      <div class="menu-card rv" data-type="veg hp"><span class="meal-emoji">🍱</span><div class="meal-name">Protein Thali</div><div class="meal-price">₹99</div><div class="meal-tag">Paneer + Dal + Rice + Roti + Salad</div><div class="macro-bar"><div class="macro-fill" style="width:85%"></div></div><span class="menu-type veg">Veg</span> <span class="menu-type hp">32g protein</span></div>
+      <div class="menu-card rv rv-d1" data-type="veg"><span class="meal-emoji">🍲</span><div class="meal-name">Dal Rice Combo</div><div class="meal-price">₹69</div><div class="meal-tag">Tadka Dal + Jeera Rice + Papad</div><div class="macro-bar"><div class="macro-fill" style="width:52%"></div></div><span class="menu-type veg">Veg</span></div>
+      <div class="menu-card rv rv-d2" data-type="nv hp"><span class="meal-emoji">🍗</span><div class="meal-name">Chicken Rice Bowl</div><div class="meal-price">₹119</div><div class="meal-tag">Grilled Chicken + Brown Rice + Veg</div><div class="macro-bar"><div class="macro-fill" style="width:92%"></div></div><span class="menu-type nv">Non-Veg</span> <span class="menu-type hp">38g protein</span></div>
+      <div class="menu-card rv rv-d3" data-type="veg hp"><span class="meal-emoji">🥗</span><div class="meal-name">Sprouts Power Bowl</div><div class="meal-price">₹59</div><div class="meal-tag">Mixed Sprouts + Peanuts + Lemon</div><div class="macro-bar"><div class="macro-fill" style="width:70%"></div></div><span class="menu-type veg">Veg</span> <span class="menu-type hp">22g protein</span></div>
+      <div class="menu-card rv" data-type="nv"><span class="meal-emoji">🥚</span><div class="meal-name">Egg Curry Thali</div><div class="meal-price">₹79</div><div class="meal-tag">Egg Curry + Rice + Roti + Pickle</div><div class="macro-bar"><div class="macro-fill" style="width:65%"></div></div><span class="menu-type nv">Non-Veg</span></div>
+      <div class="menu-card rv rv-d1" data-type="veg"><span class="meal-emoji">🥘</span><div class="meal-name">Paneer Butter Box</div><div class="meal-price">₹89</div><div class="meal-tag">Paneer Butter + Naan + Raita</div><div class="macro-bar"><div class="macro-fill" style="width:75%"></div></div><span class="menu-type veg">Veg</span></div>
+      <div class="menu-card rv rv-d2" data-type="nv hp"><span class="meal-emoji">🐟</span><div class="meal-name">Fish Curry Meal</div><div class="meal-price">₹129</div><div class="meal-tag">Fish Curry + Rice + Veg + Curd</div><div class="macro-bar"><div class="macro-fill" style="width:88%"></div></div><span class="menu-type nv">Non-Veg</span> <span class="menu-type hp">35g protein</span></div>
+      <div class="menu-card rv rv-d3" data-type="veg"><span class="meal-emoji">🫕</span><div class="meal-name">Sambar Rice Set</div><div class="meal-price">₹65</div><div class="meal-tag">Sambar + Rice + Podi + Papad</div><div class="macro-bar"><div class="macro-fill" style="width:48%"></div></div><span class="menu-type veg">Veg</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="sec" id="how">
+  <div class="container">
+    <div class="sec-label rv">How It Works</div>
+    <h2 class="sec-title rv rv-d1">Kitchen to campus in 4 steps.</h2>
+    <p class="sec-desc rv rv-d2">No apps to download yet. Just join the waitlist and we handle the rest.</p>
+    <div class="steps">
+      <div class="step rv"><div class="step-n">1</div><h3>Pick Zone</h3><p>Select campus, hostel, or office block.</p></div>
+      <div class="step rv rv-d1"><div class="step-n">2</div><h3>Choose Meal</h3><p>Browse protein-rich menus with ratings.</p></div>
+      <div class="step rv rv-d2"><div class="step-n">3</div><h3>Group Order</h3><p>Batched delivery = ₹8 per meal.</p></div>
+      <div class="step rv rv-d3"><div class="step-n">4</div><h3>Enjoy & Rate</h3><p>Hot food. Rate cook. Subscribe daily.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COOK SPOTLIGHT ═══ -->
+<section class="sec cook-sec" id="cooks">
+  <div class="container">
+    <div class="sec-label rv">Meet Our Cooks</div>
+    <h2 class="sec-title rv rv-d1">Kitchen-inspected. Student-approved.</h2>
+    <p class="sec-desc rv rv-d2">Every cook is FSSAI verified, hygiene scored, and rated by real students.</p>
+  </div>
+  <div class="cook-track">
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--saffron-g)">👩‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Lakshmi Aunty</div><div class="cook-spec">South Indian · Pure Veg</div><div class="cook-stars">★★★★★</div><div class="cook-meals">1,200+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--turmeric-s)">👨‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Meena's Kitchen</div><div class="cook-spec">North Indian · Veg/NV</div><div class="cook-stars">★★★★★</div><div class="cook-meals">890+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--leaf-s)">🧑‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Amma's Tiffin</div><div class="cook-spec">Home-style · Pure Veg</div><div class="cook-stars">★★★★☆</div><div class="cook-meals">650+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#F3E5F5">👩‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Fatima's Biryani</div><div class="cook-spec">Hyderabadi · Non-Veg</div><div class="cook-stars">★★★★★</div><div class="cook-meals">1,500+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#E8F5E9">👨‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Raju Protein Box</div><div class="cook-spec">High-Protein · Gym</div><div class="cook-stars">★★★★★</div><div class="cook-meals">780+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#FFF3E0">🧑‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Kavitha Foods</div><div class="cook-spec">Karnataka · Veg</div><div class="cook-stars">★★★★☆</div><div class="cook-meals">430+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <!-- dup -->
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--saffron-g)">👩‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Lakshmi Aunty</div><div class="cook-spec">South Indian · Pure Veg</div><div class="cook-stars">★★★★★</div><div class="cook-meals">1,200+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--turmeric-s)">👨‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Meena's Kitchen</div><div class="cook-spec">North Indian · Veg/NV</div><div class="cook-stars">★★★★★</div><div class="cook-meals">890+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:var(--leaf-s)">🧑‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Amma's Tiffin</div><div class="cook-spec">Home-style · Pure Veg</div><div class="cook-stars">★★★★☆</div><div class="cook-meals">650+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#F3E5F5">👩‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Fatima's Biryani</div><div class="cook-spec">Hyderabadi · Non-Veg</div><div class="cook-stars">★★★★★</div><div class="cook-meals">1,500+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#E8F5E9">👨‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Raju Protein Box</div><div class="cook-spec">High-Protein · Gym</div><div class="cook-stars">★★★★★</div><div class="cook-meals">780+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+    <div class="cook-card"><div class="cook-avatar" style="background:#FFF3E0">🧑‍🍳<span class="verified-check">✓</span></div><div class="cook-name">Kavitha Foods</div><div class="cook-spec">Karnataka · Veg</div><div class="cook-stars">★★★★☆</div><div class="cook-meals">430+ meals</div><div class="cook-inspect">🛡 Kitchen Verified · FSSAI</div></div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ═══ -->
+<section class="sec" id="pricing" style="background:var(--cream)">
+  <div class="container">
+    <div class="sec-label rv">Plans</div>
+    <h2 class="sec-title rv rv-d1">Pick your plan. Eat better.</h2>
+    <p class="sec-desc rv rv-d2">Cancel anytime. No lock-in. First meal free for waitlist members.</p>
+    <div class="pricing-grid">
+      <div class="price-card rv"><span class="price-emoji">🍱</span><div class="price-plan">Per Meal</div><div class="price-amt">₹80<span>/meal</span></div><div class="price-save">Save ₹170 vs Swiggy</div><ul class="price-features"><li>Any listed meal</li><li>Grouped delivery ₹10</li><li>Cook ratings</li><li>UPI payment</li></ul><a href="#waitlist" class="btn-cta" style="width:100%;justify-content:center" onclick="goTo('waitlist')">Join Waitlist</a></div>
+      <div class="price-card pop rv rv-d1"><div class="pop-tag">Popular</div><span class="price-emoji">📅</span><div class="price-plan">Weekly</div><div class="price-amt">₹499<span>/wk</span></div><div class="price-save">Save ₹1,251/week vs Swiggy</div><ul class="price-features"><li>7 meals</li><li>Free delivery</li><li>Protein custom</li><li>Priority matching</li></ul><a href="#waitlist" class="btn-cta" style="width:100%;justify-content:center" onclick="goTo('waitlist')">Join Waitlist</a></div>
+      <div class="price-card rv rv-d2"><span class="price-emoji">🗓️</span><div class="price-plan">Monthly</div><div class="price-amt">₹1,799<span>/mo</span></div><div class="price-save">Save ₹4,801/month vs Swiggy</div><ul class="price-features"><li>30 meals</li><li>Free delivery</li><li>Switch cooks</li><li>VIP support</li></ul><a href="#waitlist" class="btn-cta" style="width:100%;justify-content:center" onclick="goTo('waitlist')">Join Waitlist</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REFERRAL ═══ -->
+<section class="sec" id="referral">
+  <div class="container">
+    <div class="ref-card rv">
+      <h3>🎁 Refer Friends. Eat Free.</h3>
+      <p>Share HungerHub with your hostel floor. The more who join, the more you save.</p>
+      <div class="ref-perks">
+        <div class="ref-perk">👥 Refer 3 → Free week of meals</div>
+        <div class="ref-perk">🏆 Top referrer → 1 month free</div>
+        <div class="ref-perk">🔥 5-day streak → Bonus dessert</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AI ANGLE ═══ -->
+<section class="sec" id="ai" style="background:var(--cream)">
+  <div class="container">
+    <div class="ai-card rv">
+      <div class="ai-tag">Coming Soon</div>
+      <span class="ai-icon">🤖</span>
+      <h3 style="font-size:1.3rem;margin-bottom:8px">AI Meal Planner</h3>
+      <p style="font-size:.88rem;color:var(--muted);line-height:1.6">Tell us your budget, protein goals, and preferences. Our AI auto-plans your entire week of meals in one click. No more deciding what to eat.</p>
+      <a href="#waitlist" class="btn-cta" style="margin-top:16px" onclick="goTo('waitlist')">Get Early Access →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="sec" id="testimonials">
+  <div class="container">
+    <div class="sec-label rv">Student Love</div>
+    <h2 class="sec-title rv rv-d1">Don't take our word for it.</h2>
+    <p class="sec-desc rv rv-d2">Real students. Real savings. Real food.</p>
+    <div class="testi-grid">
+      <div class="testi rv"><p>Stopped eating Maggi every night. Protein thali is legit and costs less than Swiggy. Saved ₹4K last month.</p><div class="testi-author"><div class="testi-av">R</div><div><div class="testi-name">Rancho</div><div class="testi-role">B.Tech, BMS College</div></div></div></div>
+      <div class="testi rv rv-d1"><p>Group delivery is genius. My hostel floor orders together — delivery is free. Better than mom's cooking (don't tell her).</p><div class="testi-author"><div class="testi-av">P</div><div><div class="testi-name">Priya Deka</div><div class="testi-role">MBA, Christ University</div></div></div></div>
+      <div class="testi rv rv-d2"><p>Our office ditched the cafeteria for HungerHub. Team morale went up just from better lunch. No joke.</p><div class="testi-author"><div class="testi-av">A</div><div><div class="testi-name">Arjun Mehta</div><div class="testi-role">SWE, Electronic City</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ZONES ═══ -->
+<section class="sec" id="zones" style="background:var(--cream)">
+  <div class="container">
+    <div class="sec-label rv">Delivery Zones</div>
+    <h2 class="sec-title rv rv-d1">Where we deliver.</h2>
+    <p class="sec-desc rv rv-d2">Starting Bengaluru. Expanding fast based on demand.</p>
+    <div class="zone-grid rv rv-d3">
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">📍</div><div><div class="zone-name">BMS College</div><div class="zone-status live">● Live</div><div class="zone-demand">127 students joined</div></div></div>
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">📍</div><div><div class="zone-name">Christ University</div><div class="zone-status live">● Live</div><div class="zone-demand">89 students joined</div></div></div>
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">📍</div><div><div class="zone-name">Electronic City</div><div class="zone-status live">● Live</div><div class="zone-demand">203 professionals joined</div></div></div>
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">🔜</div><div><div class="zone-name">ORR / Marathahalli</div><div class="zone-status soon">Launching in 12 days</div><div class="zone-demand">58 waiting</div></div></div>
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">🔜</div><div><div class="zone-name">Whitefield</div><div class="zone-status soon">Launching in 18 days</div><div class="zone-demand">34 waiting</div></div></div>
+      <div class="zone-card" onclick="goTo('waitlist')"><div class="zone-pin">🔜</div><div><div class="zone-name">Koramangala / HSR</div><div class="zone-status soon">Launching in 25 days</div><div class="zone-demand">71 waiting</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WAITLIST ═══ -->
+<section class="wl-sec" id="waitlist">
+  <h2 class="rv">Stop overpaying. Start eating better.</h2>
+  <p class="rv rv-d1">Join 847 students already on the waitlist. Free first meal + ₹200 wallet credit for early members.</p>
+  <div class="urgency-strip rv rv-d2">🔥 Only <strong>147 spots</strong> left for free lifetime delivery</div>
+  <div class="wl-form rv rv-d3" id="wlForm">
+    <div class="row"><input type="text" id="uName" placeholder="Your name" required></div>
+    <div class="row"><input type="email" id="uEmail" placeholder="Email address" required><input type="tel" id="uPhone" placeholder="WhatsApp number" required></div>
+    <div class="row">
+      <select id="uType"><option value="" disabled selected>I am a...</option><option value="student">Student</option><option value="working">Working Professional</option><option value="cook">Home Cook (partner)</option><option value="corp">Corporate Admin</option></select>
+      <select id="uArea"><option value="" disabled selected>My area...</option><option value="bms">BMS College</option><option value="christ">Christ University</option><option value="ecity">Electronic City</option><option value="orr">ORR / Marathahalli</option><option value="wf">Whitefield</option><option value="other">Other</option></select>
+    </div>
+    <button class="btn-wl" id="wlBtn" onclick="submitWL()">Get My Free Meal + ₹200 Credit 🍛</button>
+    <div class="wl-perks"><span class="wl-perk">🍛 Free first meal</span><span class="wl-perk">💰 ₹200 wallet credit</span><span class="wl-perk">🚚 Free delivery for life*</span></div>
+    <p class="wl-note">No spam. *For first 200 members only.</p>
+  </div>
+  <div class="wl-ok" id="wlOk">
+    <span class="ok-emoji">🎉</span>
+    <div class="ok-title">You're in!</div>
+    <p class="ok-msg">Welcome, <strong id="okName"></strong>! Your free meal + ₹200 credit is locked. We'll WhatsApp you when we launch in your area.</p>
+    <div class="wl-count">🍛 <span id="wlNum">848</span> students on the waitlist</div>
+  </div>
+</section>
+
+<!-- Sticky mobile CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-text">First meal <span>₹0</span></div>
+  <a href="#waitlist" class="btn-cta" onclick="goTo('waitlist')">Join Free →</a>
+</div>
+
+<!-- WhatsApp -->
+<a class="wa" href="https://wa.me/917275259999?text=Hi!%20Tell%20me%20about%20HungerHub" target="_blank" title="Chat on WhatsApp"><div class="wa-p"></div>💬</a>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="logo-text">Hunger<span>Hub</span></div><p>Smart Meals, Smarter Delivery. Home-cooked food for Bengaluru campuses.</p></div>
+    <div class="footer-col"><h4>Product</h4><a href="#menu" onclick="goTo('menu')">Menu</a><a href="#pricing" onclick="goTo('pricing')">Plans</a><a href="#cooks" onclick="goTo('cooks')">Cooks</a><a href="#zones" onclick="goTo('zones')">Zones</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="mailto:ayushbanka.bs23@bmsce.ac.in">Contact</a></div>
+    <div class="footer-col"><h4>Connect</h4><a href="www.instagram.com/ayushhbanka">Instagram</a><a href="https://wa.me/917275259999" target="_blank">WhatsApp</a><a href="www.linkedin.com/in/ayush-banka">LinkedIn</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 HungerHub · BMS College of Engineering, Bengaluru · Made with ❤️ and dal bati chruma</div>
+</footer>
+
+<script>
+// ─── Navigation ───
+function goTo(id){var el=document.getElementById(id);if(el){var t=el.getBoundingClientRect().top+window.pageYOffset-document.getElementById('nav').offsetHeight;window.scrollTo({top:t,behavior:'smooth'});history.pushState(null,null,'#'+id);document.getElementById('navL').classList.remove('open')}return false}
+document.getElementById('navT').addEventListener('click',function(){document.getElementById('navL').classList.toggle('open')});
+
+// Active nav
+var navAs=document.querySelectorAll('.nav-links a:not(.btn-cta)');
+window.addEventListener('scroll',function(){
+  var y=window.pageYOffset+100;
+  document.querySelectorAll('[id]').forEach(function(s){
+    if(y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight){
+      navAs.forEach(function(a){a.classList.toggle('act',a.getAttribute('href')==='#'+s.id)});
+    }
+  });
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20);
+  document.getElementById('prog').style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// Reveal
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');obs.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){obs.observe(el)});
+
+// Counters
+var counted=false;
+new IntersectionObserver(function(e){if(e[0].isIntersecting&&!counted){counted=true;document.querySelectorAll('.stat-num[data-target]').forEach(function(el){var t=+el.dataset.target,s=Math.ceil(t/40),c=0;var iv=setInterval(function(){c+=s;if(c>=t){c=t;clearInterval(iv)}el.textContent=c+'+'},22)})}},{threshold:.5}).observe(document.querySelector('.hero-stats'));
+
+// Menu filter
+function filterMenu(type){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  document.querySelectorAll('.menu-card').forEach(function(c){
+    if(type==='all')c.classList.remove('hidden');
+    else c.classList.toggle('hidden',!c.dataset.type.includes(type));
+  });
+}
+
+// Food particles
+var foods=['🍛','🥘','🍲','🥗','🍱','🥙','🍚','🥣'];
+var pc=document.getElementById('particles');
+for(var i=0;i<6;i++){var p=document.createElement('div');p.className='fp';p.textContent=foods[Math.floor(Math.random()*foods.length)];p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*9+'s';p.style.animationDuration=(7+Math.random()*5)+'s';pc.appendChild(p)}
+
+// Confetti
+function boom(){var w=document.getElementById('confetti');w.innerHTML='';w.classList.add('go');var cols=['#D4562A','#E8A630','#3A7D44','#8B5CF6','#EC4899','#3B82F6'];for(var i=0;i<80;i++){var c=document.createElement('div');c.className='confetti-piece';c.style.left=Math.random()*100+'%';c.style.top='-10px';c.style.background=cols[Math.floor(Math.random()*cols.length)];c.style.animationDelay=Math.random()*1.5+'s';c.style.animationDuration=(2+Math.random()*2)+'s';c.style.transform='rotate('+Math.random()*360+'deg)';w.appendChild(c)}setTimeout(function(){w.classList.remove('go')},4000)}
+
+// Waitlist — Formspree
+function submitWL(){
+  var n=document.getElementById('uName').value.trim(),e=document.getElementById('uEmail').value.trim(),p=document.getElementById('uPhone').value.trim(),t=document.getElementById('uType').value,a=document.getElementById('uArea').value;
+  if(!n){alert('Please enter your name.');return}
+  if(!e||e.indexOf('@')===-1){alert('Please enter a valid email.');return}
+  if(!p||p.length<10){alert('Please enter valid WhatsApp number.');return}
+  if(!t){alert('Please select who you are.');return}
+  if(!a){alert('Please select your area.');return}
+  var btn=document.getElementById('wlBtn');btn.textContent='Joining...';btn.disabled=true;
+  fetch('https://formspree.io/f/xpqorejj',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:n,email:e,whatsapp:p,user_type:t,area:a,source:'HungerHub v3'})}).then(function(r){
+    if(r.ok){document.getElementById('wlForm').classList.add('gone');document.getElementById('wlOk').classList.add('show');document.getElementById('okName').textContent=n.split(' ')[0];document.getElementById('wlNum').textContent=(840+Math.floor(Math.random()*60));boom()}
+    else{alert('Error. Try again.');btn.textContent='Get My Free Meal + ₹200 Credit 🍛';btn.disabled=false}
+  }).catch(function(){alert('Network error.');btn.textContent='Get My Free Meal + ₹200 Credit 🍛';btn.disabled=false});
+}
+
+// Hash on load
+window.addEventListener('load',function(){var h=location.hash.replace('#','');if(h&&document.getElementById(h))setTimeout(function(){goTo(h)},300)});
+</script>
+</body>
+</html>
